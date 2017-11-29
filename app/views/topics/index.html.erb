@@ -1,0 +1,63 @@
+<div class="topic-index-wrapper">
+  <div class="container">
+    <% @topics.each do |topic| %>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="topic-index-single">
+            <h2 class="topic-author">
+              <%= topic.user.name %>
+            </h2>
+            <%= image_tag topic.image.url %>
+            <p class="topic-text">
+              <%= topic.description %>
+            </p>
+            <% if !topic.favorite_users.include?(current_user) %>
+              <%= link_to favorites_path(topic_id: topic.id), method: :post do %>
+                <%= image_tag 'icons/heart-black.png', class: 'topic-index-icon' %>
+              <% end %>
+            <% end %>
+            <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+              <%= image_tag 'icons/comment.png', class: 'topic-index-icon' %></button>
+            </a>
+            <div class="comment-area">
+              <h5>コメント</h5>
+              <% @comments.each do |comment| %>
+                  <p class="topic-text">
+                      <%= comment.content %>
+                  </p>
+              <% end %>
+            </div>
+        </div>
+
+        <!-- モーダルウィンドウを呼び出すボタン -->
+
+        </div>
+        <!-- モーダルウィンドウの中身 -->
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">コメント</h4>
+              </div>
+              <%= form_for @comment do |f| %>
+              <div class="modal-body">
+                <div class="form-group">
+                  <%= f.label :comment %>
+                  <%= f.text_field :content, class: 'form-control' %>
+                  <%= f.hidden_field :topic_id, value:topic.id %>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <%= f.submit 'コメントする', class: 'btn btn-primary' %>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">閉じる</button>
+              </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+    <% end %>
+  </div>
+</div>
+</div>
